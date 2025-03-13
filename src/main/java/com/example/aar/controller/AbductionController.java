@@ -39,4 +39,14 @@ public class AbductionController {
     public List<Abduction> getAllAbductions() {
         return abductionService.getAllAbductions();
     }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Abduction> getAbductionById(@PathVariable Long id) {
+        Abduction abduction = abductionService.getAbductionById(id);
+        if (abduction != null) {
+            return new ResponseEntity<>(abduction, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
 }
