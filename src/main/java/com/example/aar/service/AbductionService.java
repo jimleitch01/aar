@@ -31,4 +31,8 @@ public class AbductionService {
     public List<Abduction> getAllAbductions() {
         return abductionRepository.findAll();
     }
+
+    public Abduction getAbductionById(Long id) {
+        return abductionRepository.findById(id).orElse(null);
+    }
 }
