@@ -35,4 +35,8 @@ public class AbductionService {
     public Abduction getAbductionById(Long id) {
         return abductionRepository.findById(id).orElse(null);
     }
+
+    public List<Abduction> searchAbductions(String query) {
+        return abductionRepository.findByNameContainingOrPlaceContainingOrDetailsContaining(query);
+    }
 }

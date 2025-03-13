@@ -49,4 +49,9 @@ public class AbductionController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
+
+    @GetMapping("/search")
+    public List<Abduction> searchAbductions(@RequestParam("query") String query) {
+        return abductionService.searchAbductions(query);
+    }
 }
