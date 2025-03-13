@@ -10,6 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @RestController
 @RequestMapping("/api/abductions")
@@ -42,10 +43,10 @@ public class AbductionController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Abduction> getAbductionById(@PathVariable Long id) {
-        Abduction abduction = abductionService.getAbductionById(id);
-        if (abduction != null) {
+        try {
+            Abduction abduction = abductionService.getAbductionById(id);
             return new ResponseEntity<>(abduction, HttpStatus.OK);
-        } else {
+        } catch (NoSuchElementException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
@@ -53,5 +54,10 @@ public class AbductionController {
     @GetMapping("/search")
     public List<Abduction> searchAbductions(@RequestParam("query") String query) {
         return abductionService.searchAbductions(query);
+    }
+
+    @ExceptionHandler(NoSuchElementException.class)
+    public ResponseEntity<String> handleNoSuchElementException(NoSuchElementException e) {
+        return new ResponseEntity<>("Abduction not found", HttpStatus.NOT_FOUND);
     }
 }
