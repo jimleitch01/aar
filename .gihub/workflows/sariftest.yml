@@ -1,0 +1,29 @@
+---
+
+name: Trivy Docker Security Scan
+on:
+  workflow_dispatch:
+ 
+permissions:
+  actions: read
+  security-events: write
+ 
+jobs:
+  docker_security_scan:
+    runs-on: ubuntu-latest
+    steps:
+      
+      - name: Run Trivy vulnerability scan
+        uses: aquasecurity/trivy-action@0.30.0
+        with:
+          image-ref: 'docker.elastic.co/eck/eck-operator:latest'
+          format: 'sarif'
+          exit-code: 0
+          severity: 'CRITICAL,HIGH,MEDIUM'
+          output: 'trivy-results.sarif'
+ 
+      - name: Upload Trivy scan results to GitHub Security tab
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: 'trivy-results.sarif'
+ 
